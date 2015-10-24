@@ -104,15 +104,25 @@ player.prototype.reset = function () {
 }
 
 var Gem = function() {
-  this.sprite = 'images/Gem Blue.png';
-  this.x = 2 * unitWidth;
-  this.y = 2 * unitHeight;
+  var image = Math.floor((Math.random()*3)+1);
+  if (image === 1) {
+    this.sprite = 'images/Gem Blue.png';
+  }
+  if (image === 2) {
+    this.sprite = 'images/Gem Green.png';
+  }
+  if (image === 3) {
+    this.sprite = 'images/Gem Orange.png';
+  }
+  this.x = Math.floor((Math.random() * 5)+1) * unitWidth;
+  this.y = Math.floor((Math.random() * 3)+1) * unitHeight;
   this.pts = 10;
 }
 
 Gem.prototype.render = function() {
-  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 50, 80);
 }
+
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
@@ -124,7 +134,7 @@ for (;numEnemies > 0; numEnemies--) {
 var player = new player;
 
 var allGems = [];
-var numGems = 4;
+var numGems = 3;
 for (;numGems > 0; numGems--) {
   allGems.push(new Gem);
 }
