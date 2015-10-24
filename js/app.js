@@ -1,9 +1,10 @@
 var endGame = false;
 var Height = 606;
 var Width = 505;
-var unitHeight = Height / 6;
-var unitWidth = Width / 5;
+var unitHeight = 83;
+var unitWidth = 101;
 var spriteMargin = 20;
+var playerStart = [2*unitWidth,5*unitHeight];
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -13,9 +14,9 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.y = Math.random() * (Height - (unitHeight));
+    this.y = (Math.random() * unitHeight * 2 + 0.5 * unitHeight);
     this.x = 0;
-    this.speed = [Math.random() * (Width),0];
+    this.speed = [Math.random()*Width*0.5,0];
 };
 
 // Update the enemy's position, required method for game
@@ -25,10 +26,12 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed[0] * dt;
-    if (this.x-spriteMargin < player.x < this.x+spriteMargin)
-      if (this.y-spriteMargin < player.y < this.y+spriteMargin) {
-      endGame = true;
-    }
+    if (this.y+spriteMargin > player.y > this.y-spriteMargin) {
+      console.log('y collision');
+      if (this.x-spriteMargin < player.x < this.x+spriteMargin) {
+        console.log('x collision');
+        player.reset();
+      }};
     if (this.x >= (Width-Width*0.01)) {
       this.x = -0.05*Width;
     }
@@ -45,15 +48,33 @@ Enemy.prototype.render = function() {
 var player = function() {
   this.sprite = 'images/char-boy.png';
   this.speed = [0,0];
-  this.x = 2 * unitWidth;
-  this.y = 2 * unitHeight;
+  this.x = playerStart[0];
+  this.y = playerStart[1];
   this.pts = 0;
+  console.log(this.x,this.y);
 };
 
 player.prototype.update = function(dt) {
+  this.x += this.speed[0]*unitWidth;
+  this.y += this.speed[1]*unitHeight;
+  this.speed = [0,0];
+  console.log(this.x,this.y);
+  //winning
+  if (this.y === 0) {
+    player.reset();
+  }
+  //handle board edges
+  if (this.x < 0) {
+    player.x = Width-unitWidth;
+  }
+  if (this.x > Width-unitWidth) {
+    player.x =0;
+  }
+  //bottom edge
+  if (this.y > Height-unitHeight*2) {
+    this.y = playerStart[1];
+  }
 
-  this.x += this.speed[0];
-  this.y += this.speed[1];
 };
 
 player.prototype.render = function() {
@@ -69,14 +90,17 @@ player.prototype.handleInput = function(input) {
     this.speed[0] = 1;
   }
   if (input === 'up') {
-    this.speed[1] = 1;
-  }
-  if (input === 'down') {
     this.speed[1] = -1;
   }
-  if (input === undefined) {
-    this.speed = [0,0];
+  if (input === 'down') {
+    this.speed[1] = 1;
   }
+
+}
+
+player.prototype.reset = function () {
+  this.x = playerStart[0];
+  this.y = playerStart[1];
 }
 
 var Gem = function() {
@@ -93,7 +117,7 @@ Gem.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var numEnemies = 4;
+var numEnemies = 5;
 for (;numEnemies > 0; numEnemies--) {
   allEnemies.push(new Enemy);
 }
