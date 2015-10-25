@@ -1,9 +1,11 @@
+
 var endGame = false;
 var Height = 606;
 var Width = 505;
 var unitHeight = 83;
 var unitWidth = 101;
-var spriteMargin = 20;
+var xMargin = unitWidth/2;
+var yMargin = unitHeight/2;
 var playerStart = [2*unitWidth,5*unitHeight];
 
 // Enemies our player must avoid
@@ -14,9 +16,9 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.y = Math.floor(Math.random()*3)*unitHeight + 0.5 * unitHeight;
+    this.y = Math.floor(Math.random()*3)*unitHeight + unitHeight;
     this.x = 0;
-    this.speed = [Math.random()*Width*0.5,0];
+    this.speed = [Math.floor(Math.random()*3+1)*unitWidth,0];
 };
 
 // Update the enemy's position, required method for game
@@ -26,12 +28,8 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed[0] * dt;
-    if (this.y+spriteMargin > player.y > this.y-spriteMargin) {
-      console.log('y collision');
-      if (this.x-spriteMargin < player.x < this.x+spriteMargin) {
-        console.log('x collision');
-        player.reset();
-      }};
+    console.log("Bug: ",this.x,this.y);
+
     if (this.x >= (Width-Width*0.01)) {
       this.x = -0.05*Width;
     }
@@ -54,13 +52,13 @@ var player = function() {
   console.log(this.x,this.y);
 };
 
-player.prototype.update = function(dt) {
+player.prototype.update = function() {
   this.x += this.speed[0]*unitWidth;
   this.y += this.speed[1]*unitHeight;
   this.speed = [0,0];
   console.log(this.x,this.y);
   //winning
-  if (this.y === 0) {
+  if (this.y <= 0) {
     player.reset();
   }
   //handle board edges
@@ -68,13 +66,23 @@ player.prototype.update = function(dt) {
     player.x = Width-unitWidth;
   }
   if (this.x > Width-unitWidth) {
-    player.x =0;
+    player.x = 0;
   }
   //bottom edge
   if (this.y > Height-unitHeight*2) {
     this.y = playerStart[1];
   }
-
+  //check for collisions
+  allEnemies.forEach(function(bug) {
+    if (bug.y === player.y) {
+      console.log('y collision');
+      if (player.x > (bug.x-xMargin)) {
+        console.log('first x collision');
+          if (player.x < (bug.x+xMargin)) {
+            console.log('x collision');
+            player.reset();
+          }}};
+  })
 };
 
 player.prototype.render = function() {
@@ -127,7 +135,7 @@ Gem.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var numEnemies = 5;
+var numEnemies = 3;
 for (;numEnemies > 0; numEnemies--) {
   allEnemies.push(new Enemy);
 }
