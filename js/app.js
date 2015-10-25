@@ -14,7 +14,7 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.y = (Math.random() * unitHeight * 2 + 0.5 * unitHeight);
+    this.y = Math.floor(Math.random()*3)*unitHeight + 0.5 * unitHeight;
     this.x = 0;
     this.speed = [Math.random()*Width*0.5,0];
 };
@@ -114,8 +114,8 @@ var Gem = function() {
   if (image === 3) {
     this.sprite = 'images/Gem Orange.png';
   }
-  this.x = Math.floor((Math.random() * 5)+1) * unitWidth;
-  this.y = Math.floor((Math.random() * 3)+1) * unitHeight;
+  this.x = Math.floor((Math.random() * 5)+1) * unitWidth + 0.25*unitWidth;
+  this.y = Math.floor((Math.random() * 3)+1) * unitHeight + 0.5*unitHeight;
   this.pts = 10;
 }
 
