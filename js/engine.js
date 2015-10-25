@@ -25,6 +25,12 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime;
         engine = Engine;
+        unitHeight = 83;
+        unitWidth = 101;
+        xMargin = unitWidth/2;
+        yMargin = unitHeight/2;
+        playerStart = [2*unitWidth,4.75*unitHeight];
+
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
@@ -80,7 +86,7 @@ var Engine = (function(global) {
      */
     function update(dt) {
         updateEntities(dt);
-        // checkCollisions();
+        checkCollisions();
     }
 
     /* This is called by the update function  and loops through all of the
@@ -95,6 +101,26 @@ var Engine = (function(global) {
             enemy.update(dt);
         });
         player.update();
+    }
+    /* This is called by the update function and loops through all of the
+     * bugs to check if any collide with the player. If a collision is detected
+     * the reset function is called.
+     */
+    function checkCollisions() {
+      //checking for collisions with bugs
+      allEnemies.forEach(function(bug) {
+        if (bug.y === player.y) {
+          if (player.x > (bug.x-xMargin)) {
+            if (player.x < (bug.x+xMargin)) {
+              console.log("The bugs got you!");
+              reset();
+            }}};
+      });
+      //checking for victory condition
+      if (player.y <= 0) {
+        console.log("Victory!");
+        reset();
+      }
     }
 
     /* This function initially draws the "game level", it will then call
@@ -164,8 +190,9 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        // noop
-
+        player.x = playerStart[0];
+        player.y = playerStart[1];
+        renderEntities();
     }
 
     /* Go ahead and load all of the images we know we're going to need to

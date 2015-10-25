@@ -6,7 +6,7 @@ var unitHeight = 83;
 var unitWidth = 101;
 var xMargin = unitWidth/2;
 var yMargin = unitHeight/2;
-var playerStart = [2*unitWidth,5*unitHeight];
+var playerStart = [2*unitWidth,4.25*unitHeight];
 
 // Enemies our player must avoid
 var Enemy = function() {
@@ -16,7 +16,7 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.y = Math.floor(Math.random()*3)*unitHeight + unitHeight;
+    this.y = Math.floor(Math.random()*3)*unitHeight + 0.75*unitHeight;
     this.x = 0;
     this.speed = [Math.floor(Math.random()*3+1)*unitWidth,0];
 };
@@ -28,8 +28,6 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed[0] * dt;
-    console.log("Bug: ",this.x,this.y);
-
     if (this.x >= (Width-Width*0.01)) {
       this.x = -0.05*Width;
     }
@@ -49,7 +47,6 @@ var player = function() {
   this.x = playerStart[0];
   this.y = playerStart[1];
   this.pts = 0;
-  console.log(this.x,this.y);
 };
 
 player.prototype.update = function() {
@@ -57,10 +54,6 @@ player.prototype.update = function() {
   this.y += this.speed[1]*unitHeight;
   this.speed = [0,0];
   console.log(this.x,this.y);
-  //winning
-  if (this.y <= 0) {
-    player.reset();
-  }
   //handle board edges
   if (this.x < 0) {
     player.x = Width-unitWidth;
@@ -72,17 +65,6 @@ player.prototype.update = function() {
   if (this.y > Height-unitHeight*2) {
     this.y = playerStart[1];
   }
-  //check for collisions
-  allEnemies.forEach(function(bug) {
-    if (bug.y === player.y) {
-      console.log('y collision');
-      if (player.x > (bug.x-xMargin)) {
-        console.log('first x collision');
-          if (player.x < (bug.x+xMargin)) {
-            console.log('x collision');
-            player.reset();
-          }}};
-  })
 };
 
 player.prototype.render = function() {
@@ -104,11 +86,6 @@ player.prototype.handleInput = function(input) {
     this.speed[1] = 1;
   }
 
-}
-
-player.prototype.reset = function () {
-  this.x = playerStart[0];
-  this.y = playerStart[1];
 }
 
 var Gem = function() {
