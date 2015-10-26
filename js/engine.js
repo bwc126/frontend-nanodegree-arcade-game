@@ -110,17 +110,25 @@ var Engine = (function(global) {
       //checking for collisions with bugs
       allEnemies.forEach(function(bug) {
         if (bug.y === player.y) {
-          if (player.x > (bug.x-xMargin)) {
-            if (player.x < (bug.x+xMargin)) {
-              console.log("The bugs got you!");
-              reset();
-            }}};
+          if (player.x > (bug.x-xMargin) && player.x < (bug.x+xMargin)) {
+            console.log("The bugs got you!");
+            reset();
+          }};
       });
       //checking for victory condition
       if (player.y <= 0) {
         console.log("Victory!");
         reset();
-      }
+      };
+      //gem collection
+      allGems.forEach(function(gem) {
+        if ((gem.x+xMargin) > player.x && (gem.x-xMargin) < player.x) {
+          if ((gem.y) > player.y && (gem.y-2*yMargin) < player.y) {
+            console.log("You got a gem!");
+            player.pts += gem.pts;
+            allGems.splice(allGems.indexOf(gem),1);
+          }}
+        })
     }
 
     /* This function initially draws the "game level", it will then call
