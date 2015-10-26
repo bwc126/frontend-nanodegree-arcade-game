@@ -105,7 +105,7 @@ var Gem = function() {
   }
   this.x = Math.floor(Math.random() * 5) * unitWidth + 0.25*unitWidth;
   this.y = Math.floor((Math.random() * 3)+1) * unitHeight + 0.5*unitHeight;
-  this.pts = 10;
+  this.pts = 30;
 
 }
 
