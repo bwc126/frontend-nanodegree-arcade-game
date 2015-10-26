@@ -112,11 +112,13 @@ var Engine = (function(global) {
         if (bug.y === player.y) {
           if (player.x > (bug.x-xMargin) && player.x < (bug.x+xMargin)) {
             console.log("The bugs got you!");
+            player.pts = 0;
             reset();
           }};
       });
       //checking for victory condition
       if (player.y <= 0) {
+        player.pts += 100;
         console.log("Victory!");
         reset();
       };
@@ -198,7 +200,7 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-
+        console.log("Points total: " + player.pts);
         player.reset();
         createEnemies();
         createGems();

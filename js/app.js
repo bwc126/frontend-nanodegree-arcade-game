@@ -71,7 +71,6 @@ player.prototype.render = function() {
 };
 
 player.prototype.handleInput = function(input) {
-  var motion;
   if (input === 'left') {
     this.speed[0] = -1;
   }
@@ -88,7 +87,6 @@ player.prototype.handleInput = function(input) {
 }
 
 player.prototype.reset = function() {
-  this.pts = 0;
   this.x = playerStart[0];
   this.y = playerStart[1];
 
@@ -133,9 +131,7 @@ var allGems = [];
 function createGems () {
   var numGems = 3;
   allGems = [];
-  console.log("create gems invoked")
   for (;numGems > 0; numGems--) {
-    console.log("inside the for loop");
     allGems.push(new Gem);
 }}
 
