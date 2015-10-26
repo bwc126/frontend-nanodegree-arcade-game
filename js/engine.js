@@ -200,7 +200,6 @@ var Engine = (function(global) {
     function reset() {
         player.x = playerStart[0];
         player.y = playerStart[1];
-        renderEntities();
     }
 
     /* Go ahead and load all of the images we know we're going to need to

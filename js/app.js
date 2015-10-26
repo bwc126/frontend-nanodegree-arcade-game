@@ -102,7 +102,6 @@ var Gem = function() {
   this.x = Math.floor(Math.random() * 5) * unitWidth + 0.25*unitWidth;
   this.y = Math.floor((Math.random() * 3)+1) * unitHeight + 0.5*unitHeight;
   this.pts = 10;
-  console.log("gem: " + this.x + " " + this.y);
 }
 
 Gem.prototype.render = function() {
@@ -113,7 +112,7 @@ Gem.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var numEnemies = 1;
+var numEnemies = 3;
 for (;numEnemies > 0; numEnemies--) {
   allEnemies.push(new Enemy);
 }
