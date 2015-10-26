@@ -53,7 +53,6 @@ player.prototype.update = function() {
   this.x += this.speed[0]*unitWidth;
   this.y += this.speed[1]*unitHeight;
   this.speed = [0,0];
-  console.log(this.x,this.y);
   //handle board edges
   if (this.x < 0) {
     player.x = Width-unitWidth;
@@ -88,6 +87,13 @@ player.prototype.handleInput = function(input) {
 
 }
 
+player.prototype.reset = function() {
+  this.pts = 0;
+  this.x = playerStart[0];
+  this.y = playerStart[1];
+
+}
+
 var Gem = function() {
   var image = Math.floor((Math.random()*3)+1);
   if (image === 1) {
@@ -102,6 +108,7 @@ var Gem = function() {
   this.x = Math.floor(Math.random() * 5) * unitWidth + 0.25*unitWidth;
   this.y = Math.floor((Math.random() * 3)+1) * unitHeight + 0.5*unitHeight;
   this.pts = 10;
+
 }
 
 Gem.prototype.render = function() {
@@ -112,17 +119,26 @@ Gem.prototype.render = function() {
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
 var allEnemies = [];
-var numEnemies = 3;
-for (;numEnemies > 0; numEnemies--) {
-  allEnemies.push(new Enemy);
-}
-var player = new player;
 
+function createEnemies() {
+  var numEnemies = 3;
+  allEnemies = [];
+  for (;numEnemies > 0; numEnemies--) {
+    allEnemies.push(new Enemy);
+}}
+
+var player = new player;
 var allGems = [];
-var numGems = 3;
-for (;numGems > 0; numGems--) {
-  allGems.push(new Gem);
-}
+
+function createGems () {
+  var numGems = 3;
+  allGems = [];
+  console.log("create gems invoked")
+  for (;numGems > 0; numGems--) {
+    console.log("inside the for loop");
+    allGems.push(new Gem);
+}}
+
 
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don't need to modify this.
