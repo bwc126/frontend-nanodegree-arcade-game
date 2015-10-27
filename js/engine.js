@@ -131,7 +131,7 @@ var Engine = (function(global) {
         if ((gem.x+xMargin) > player.x && (gem.x-xMargin) < player.x) {
           if ((gem.y) > player.y && (gem.y-2*yMargin) < player.y) {
             message = "You got a gem!";
-            msgCounter = Date.now() + 3000;
+            msgCounter = Date.now() + 2000;
             player.pts += gem.pts;
             allGems.splice(allGems.indexOf(gem),1);
           }}
@@ -214,12 +214,12 @@ var Engine = (function(global) {
 
     function renderScore() {
       var score = player.pts;
-      var spaces = "                          ";
+      var spaces = "         ";
 
-      ctx.font = "16px bold";
-      ctx.fillStyle = "#dd9";
+      ctx.font = "18px bold";
+      ctx.fillStyle = "#dd6";
 
-      ctx.fillText("Score: " + score + spaces + message, 10, 70);
+      ctx.fillText("Score: " + score + spaces + message, 10, 75);
     }
 
 
@@ -229,7 +229,6 @@ var Engine = (function(global) {
      * those sorts of things. It's only called once by the init() method.
      */
     function reset() {
-        console.log("Points total: " + player.pts);
         player.reset();
         createEnemies();
         createGems();
