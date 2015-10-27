@@ -23,16 +23,11 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
+        xMargin = unitWidth/2,
+        yMargin = unitHeight/2,
+        msgCounter = Date.now(),
+        message = "",
         lastTime;
-        engine = Engine;
-        unitHeight = 83;
-        unitWidth = 101;
-        xMargin = unitWidth/2;
-        yMargin = unitHeight/2;
-        playerStart = [2*unitWidth,4.75*unitHeight];
-        msgCounter = Date.now();
-        message = "";
-
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
@@ -119,7 +114,8 @@ var Engine = (function(global) {
             reset();
           }};
       });
-      //checking for victory condition
+      //checking for collision with the water, our victory condition, which is
+      // kind of odd because the character isn't a frog.
       if (player.y <= 0) {
         player.pts += 100;
         message = "Victory!";
@@ -179,13 +175,13 @@ var Engine = (function(global) {
 
 
         renderEntities();
-
+        // Check to see if our message should expire
         var current = Date.now();
         if (current >= msgCounter) {
           message = "";
         }
-
-        renderScore();
+        // Render the score and message overlay
+        renderOverlay();
 
     }
 
@@ -198,27 +194,22 @@ var Engine = (function(global) {
          * the render function you have defined.
          */
         allGems.forEach(function(gem) {
-         gem.render();
+            gem.render();
         });
         allEnemies.forEach(function(enemy) {
             enemy.render();
         });
-
-
         player.render();
     }
 
     /* This function renders the score and any messages from game events on the
      * canvas
      */
-
-    function renderScore() {
+    function renderOverlay() {
       var score = player.pts;
       var spaces = "         ";
-
       ctx.font = "18px bold";
       ctx.fillStyle = "#dd6";
-
       ctx.fillText("Score: " + score + spaces + message, 10, 75);
     }
 
