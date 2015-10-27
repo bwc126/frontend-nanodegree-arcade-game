@@ -13,7 +13,6 @@
  * the canvas' context (ctx) object globally available to make writing app.js
  * a little simpler to work with.
  */
-
 var Engine = (function(global) {
     /* Predefine the variables we'll be using within this scope,
      * create the canvas element, grab the 2D context for that canvas
@@ -23,8 +22,8 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        xMargin = unitWidth/2,
-        yMargin = unitHeight/2,
+        xMargin = unitWidth / 2,
+        yMargin = unitHeight / 2,
         msgCounter = Date.now(),
         message = "",
         lastTime;
@@ -104,33 +103,35 @@ var Engine = (function(global) {
      * the reset function is called.
      */
     function checkCollisions() {
-      //checking for collisions with bugs
-      allEnemies.forEach(function(bug) {
-        if (bug.y === player.y) {
-          if (player.x > (bug.x-xMargin) && player.x < (bug.x+xMargin)) {
-            message = "The bugs got you!";
+        //checking for collisions with bugs
+        allEnemies.forEach(function(bug) {
+            if (bug.y === player.y) {
+                if (player.x > (bug.x - xMargin) && player.x < (bug.x + xMargin)) {
+                    message = "The bugs got you!";
+                    msgCounter = Date.now() + 3000;
+                    player.pts = 0;
+                    reset();
+                }
+            };
+        });
+        //checking for collision with the water, our victory condition, which is
+        // kind of odd because the character isn't a frog.
+        if (player.y <= 0) {
+            player.pts += 100;
+            message = "Victory!";
             msgCounter = Date.now() + 3000;
-            player.pts = 0;
             reset();
-          }};
-      });
-      //checking for collision with the water, our victory condition, which is
-      // kind of odd because the character isn't a frog.
-      if (player.y <= 0) {
-        player.pts += 100;
-        message = "Victory!";
-        msgCounter = Date.now() + 3000;
-        reset();
-      };
-      //gem collection
-      allGems.forEach(function(gem) {
-        if ((gem.x+xMargin) > player.x && (gem.x-xMargin) < player.x) {
-          if ((gem.y) > player.y && (gem.y-2*yMargin) < player.y) {
-            message = "You got a gem!";
-            msgCounter = Date.now() + 2000;
-            player.pts += gem.pts;
-            allGems.splice(allGems.indexOf(gem),1);
-          }}
+        };
+        //gem collection
+        allGems.forEach(function(gem) {
+            if ((gem.x + xMargin) > player.x && (gem.x - xMargin) < player.x) {
+                if ((gem.y) > player.y && (gem.y - 2 * yMargin) < player.y) {
+                    message = "You got a gem!";
+                    msgCounter = Date.now() + 2000;
+                    player.pts += gem.pts;
+                    allGems.splice(allGems.indexOf(gem), 1);
+                }
+            }
         })
     }
 
@@ -145,12 +146,12 @@ var Engine = (function(global) {
          * for that particular row of the game level.
          */
         var rowImages = [
-                'images/water-block.png',   // Top row is water
-                'images/stone-block.png',   // Row 1 of 3 of stone
-                'images/stone-block.png',   // Row 2 of 3 of stone
-                'images/stone-block.png',   // Row 3 of 3 of stone
-                'images/grass-block.png',   // Row 1 of 2 of grass
-                'images/grass-block.png'    // Row 2 of 2 of grass
+                'images/water-block.png', // Top row is water
+                'images/stone-block.png', // Row 1 of 3 of stone
+                'images/stone-block.png', // Row 2 of 3 of stone
+                'images/stone-block.png', // Row 3 of 3 of stone
+                'images/grass-block.png', // Row 1 of 2 of grass
+                'images/grass-block.png' // Row 2 of 2 of grass
             ],
             numRows = 6,
             numCols = 5,
@@ -173,13 +174,14 @@ var Engine = (function(global) {
             }
         }
 
-
         renderEntities();
+
         // Check to see if our message should expire
         var current = Date.now();
         if (current >= msgCounter) {
-          message = "";
+            message = "";
         }
+
         // Render the score and message overlay
         renderOverlay();
 
@@ -191,7 +193,8 @@ var Engine = (function(global) {
      */
     function renderEntities() {
         /* Loop through all of the objects within the allEnemies array and call
-         * the render function you have defined.
+         * the render function you have defined. Do the same for allGems and
+         * the player. 
          */
         allGems.forEach(function(gem) {
             gem.render();
@@ -206,11 +209,11 @@ var Engine = (function(global) {
      * canvas
      */
     function renderOverlay() {
-      var score = player.pts;
-      var spaces = "         ";
-      ctx.font = "18px bold";
-      ctx.fillStyle = "#dd6";
-      ctx.fillText("Score: " + score + spaces + message, 10, 75);
+        var score = player.pts;
+        var spaces = "         ";
+        ctx.font = "18px bold";
+        ctx.fillStyle = "#dd6";
+        ctx.fillText("Score: " + score + spaces + message, 10, 75);
     }
 
 
