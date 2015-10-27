@@ -30,6 +30,8 @@ var Engine = (function(global) {
         xMargin = unitWidth/2;
         yMargin = unitHeight/2;
         playerStart = [2*unitWidth,4.75*unitHeight];
+        msgCounter = Date.now();
+        message = "";
 
     canvas.width = 505;
     canvas.height = 606;
@@ -111,7 +113,8 @@ var Engine = (function(global) {
       allEnemies.forEach(function(bug) {
         if (bug.y === player.y) {
           if (player.x > (bug.x-xMargin) && player.x < (bug.x+xMargin)) {
-            console.log("The bugs got you!");
+            message = "The bugs got you!";
+            msgCounter = Date.now() + 3000;
             player.pts = 0;
             reset();
           }};
@@ -119,14 +122,16 @@ var Engine = (function(global) {
       //checking for victory condition
       if (player.y <= 0) {
         player.pts += 100;
-        console.log("Victory!");
+        message = "Victory!";
+        msgCounter = Date.now() + 3000;
         reset();
       };
       //gem collection
       allGems.forEach(function(gem) {
         if ((gem.x+xMargin) > player.x && (gem.x-xMargin) < player.x) {
           if ((gem.y) > player.y && (gem.y-2*yMargin) < player.y) {
-            console.log("You got a gem!");
+            message = "You got a gem!";
+            msgCounter = Date.now() + 3000;
             player.pts += gem.pts;
             allGems.splice(allGems.indexOf(gem),1);
           }}
@@ -174,6 +179,14 @@ var Engine = (function(global) {
 
 
         renderEntities();
+
+        var current = Date.now();
+        if (current >= msgCounter) {
+          message = "";
+        }
+
+        renderScore();
+
     }
 
     /* This function is called by the render function and is called on each game
@@ -195,6 +208,22 @@ var Engine = (function(global) {
         player.render();
     }
 
+    /* This function renders the score and any messages from game events on the
+     * canvas
+     */
+
+    function renderScore() {
+      var score = player.pts;
+      var spaces = "                          ";
+
+      ctx.font = "16px bold";
+      ctx.fillStyle = "#dd9";
+
+      ctx.fillText("Score: " + score + spaces + message, 10, 70);
+    }
+
+
+
     /* This function does nothing but it could have been a good place to
      * handle game reset states - maybe a new game menu or a game over screen
      * those sorts of things. It's only called once by the init() method.
@@ -204,7 +233,6 @@ var Engine = (function(global) {
         player.reset();
         createEnemies();
         createGems();
-
     }
 
     /* Go ahead and load all of the images we know we're going to need to
