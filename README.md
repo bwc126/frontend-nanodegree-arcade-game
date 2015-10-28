@@ -12,8 +12,10 @@ The scripts app.js, engine.js and the 'images' folder must be in the same parent
 
 To Play:
 
-Use the arrow keys to change the character's position. Avoid the bugs.
+At the character selection screen, press numbers 1-5 to choose an avatar. Press enter to begin the game.
+Once the game has begun, use the arrow keys to change the character's position.
+Avoid the bugs.
+If an enemy gets you, your position and score will be reset.
 Collect gems to increase your score.
 Reach the water tiles to increase your score and reset the board, loading new gems and enemies. This kind of reset allows you to keep your score.
-If an enemy gets you, your position and score will be reset.
-This makes the game a balancing act between collecting the gems to increase your score and avoiding enemies so as to not lose it all. 
+This makes the game a balancing act between collecting the gems to increase your score and avoiding enemies so as to not lose it all.

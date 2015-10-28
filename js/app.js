@@ -8,6 +8,8 @@ var yMargin = unitHeight / 2;
 var allEnemies = [];
 var allGems = [];
 
+
+
 /** @function enemy creates a new enemy object, setting its position
  * to a randomized but discrete y position and giving it a randomized speed.
  * Also assigns its sprite. Note enemies always begin at left extreme.
@@ -49,7 +51,13 @@ Enemy.prototype.render = function() {
  * initializes its point tally.
  */
 var player = function() {
-    this.sprite = 'images/char-boy.png';
+
+    this.sprites = ['images/char-cat-girl.png',
+                    'images/char-horn-girl.png',
+                    'images/char-boy.png',
+                    'images/char-pink-girl.png',
+                    'images/char-princess-girl.png'];
+    this.selection = 2;
     this.speed = [0, 0];
     this.x = playerStart[0];
     this.y = playerStart[1];
@@ -82,7 +90,7 @@ player.prototype.update = function() {
 /** @function render simply draws the player object on the canvas.
  */
 player.prototype.render = function() {
-    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+    ctx.drawImage(Resources.get(this.sprites[this.selection]), this.x, this.y);
 };
 
 /** @function handleInput receives input from the user and translates it into
@@ -90,6 +98,7 @@ player.prototype.render = function() {
  * player.
  */
 player.prototype.handleInput = function(input) {
+
         if (input === 'left') {
             this.speed[0] = -1;
         }
@@ -103,7 +112,7 @@ player.prototype.handleInput = function(input) {
             this.speed[1] = 1;
         }
 
-    }
+}
 
 /** @function reset acts as a positional reset for our player upon victory or
  * obliteration by bugs. Invoked by the engine's reset() function.
@@ -140,6 +149,65 @@ Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 50, 80);
 }
 
+/** @var selector is the selector object within the character selection screen
+  */
+var selector = function() {
+  this.sprite = 'images/Selector.png';
+  this.message = "Press 1-5 to Choose an Avatar and Press Enter when Ready";
+  this.y = 4.5*unitHeight;
+  this.x = 2*unitWidth;
+  this.selectionMade = false;
+
+}
+
+/** @function render displays the player prompt and possible character
+  * choices within the character selection screen.
+  */
+selector.prototype.render = function() {
+  ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+  ctx.fillStyle = "#ddd";
+  ctx.fillRect(unitWidth/7, 2.6*unitHeight, 4.75*unitWidth, 0.3*unitHeight);
+  ctx.fillStyle = "#555";
+  ctx.font = "bolder small-caps 15px sans-serif";
+  ctx.fillText(this.message, unitWidth/6, 2.8 * unitHeight);
+  player.sprites.forEach(function(sprite) {
+      ctx.drawImage(Resources.get(sprite), player.sprites.indexOf(sprite)*unitWidth, 4.5*unitHeight);
+  });
+}
+
+/** @function handleInput accepts keyboard inputs during character selection.
+  * Once the player presses the enter key, the player has made a selection
+  * and this function is not invoked again during the game.
+  */
+selector.prototype.handleInput = function(input) {
+  var selectionMade = this.selectionMade;
+    if (!selectionMade) {
+      sprites = player.sprites;
+      if (input === '1') {
+        this.x = 0;
+        player.selection = 0;
+      }
+      if (input === '2') {
+        this.x = unitWidth;
+        player.selection = 1;
+      }
+      if (input === '3') {
+        this.x = 2 * unitWidth;
+        player.selection = 2;
+      }
+      if (input === '4') {
+        this.x = 3 * unitWidth;
+        player.selection = 3;
+      }
+      if (input === '5') {
+        this.x = 4 * unitWidth;
+        player.selection = 4;
+      }
+      if (input === 'enter') {
+        this.selectionMade = true;
+      }}
+}
+
 /** @function: createEnemies allows us to create a distinct batch of enemies on
  * each reset of the game, with new positions and speeds
  */
@@ -163,19 +231,29 @@ function createGems() {
 }
 
 /** @var player creates a living instance of our player prototype, allowing it
- * to be manipulated by the user and game engine as required.
+ * to be manipulated by the user and game engine as required. selector does
+ * a similar operation for the character selection screen.
  */
 var player = new player;
+var selector = new selector;
 
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
     var allowedKeys = {
+        13: 'enter',
         37: 'left',
         38: 'up',
         39: 'right',
-        40: 'down'
+        40: 'down',
+        49: '1',
+        50: '2',
+        51: '3',
+        52: '4',
+        53: '5'
     };
-
     player.handleInput(allowedKeys[e.keyCode]);
+    if (!selector.selectionMade) {
+      selector.handleInput(allowedKeys[e.keyCode]);
+    }
 });
