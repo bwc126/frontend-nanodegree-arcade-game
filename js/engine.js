@@ -198,17 +198,16 @@ var Engine = (function(global) {
          * and the player.
          */
         if (!selector.selectionMade) {
-          selector.render();
-        }
-        else {
-          allGems.forEach(function(gem) {
-              gem.render();
-          });
-          allEnemies.forEach(function(enemy) {
-              enemy.render();
-          });
+            selector.render();
+        } else {
+            allGems.forEach(function(gem) {
+                gem.render();
+            });
+            allEnemies.forEach(function(enemy) {
+                enemy.render();
+            });
 
-          player.render();
+            player.render();
         }
     }
 
