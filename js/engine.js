@@ -103,14 +103,12 @@ var Engine = (function(global) {
     function checkCollisions() {
         //checking for collisions with bugs
         allEnemies.forEach(function(bug) {
-            if (bug.y === player.y) {
-                if (player.x > (bug.x - X_MARGIN) && player.x < (bug.x + X_MARGIN)) {
-                    ticker = "The bugs got you!";
-                    msgCounter = Date.now() + 3000;
-                    player.pts = 0;
-                    reset();
-                }
-            };
+            if ((bug.y === player.y) && (player.x > (bug.x - X_MARGIN) && player.x < (bug.x + X_MARGIN))) {
+              ticker = "The bugs got you!";
+              msgCounter = Date.now() + 3000;
+              player.pts = 0;
+              reset();
+            }
         });
         //checking for collision with the water, our victory condition, which is
         // kind of odd because the character isn't a frog.
@@ -122,13 +120,11 @@ var Engine = (function(global) {
         };
         //gem collection
         allGems.forEach(function(gem) {
-            if ((gem.x + X_MARGIN) > player.x && (gem.x - X_MARGIN) < player.x) {
-                if ((gem.y) > player.y && (gem.y - 2 * Y_MARGIN) < player.y) {
-                    ticker = "You got a gem!";
-                    msgCounter = Date.now() + 2000;
-                    player.pts += gem.pts;
-                    allGems.splice(allGems.indexOf(gem), 1);
-                }
+            if (((gem.x + X_MARGIN) > player.x && (gem.x - X_MARGIN) < player.x) && ((gem.y) > player.y && (gem.y - 2 * Y_MARGIN) < player.y)) {
+              ticker = "You got a gem!";
+              msgCounter = Date.now() + 2000;
+              player.pts += gem.pts;
+              allGems.splice(allGems.indexOf(gem), 1);
             }
         })
     }
