@@ -1,13 +1,13 @@
-var Height = 606;
-var Width = 505;
-var unitHeight = 83;
-var unitWidth = 101;
-var playerStart = [2 * unitWidth, 4.75 * unitHeight];
-var xMargin = unitWidth / 2;
-var yMargin = unitHeight / 2;
+'use strict';
+var HEIGHT = 606;
+var WIDTH = 505;
+var UNIT_HEIGHT = 83;
+var UNIT_WIDTH = 101;
+var PLAYER_START = [2 * UNIT_WIDTH, 4.75 * UNIT_HEIGHT];
+var X_MARGIN = UNIT_WIDTH / 2;
+var Y_MARGIN = UNIT_HEIGHT / 2;
 var allEnemies = [];
 var allGems = [];
-
 
 
 /** @function enemy creates a new enemy object, setting its position
@@ -21,9 +21,9 @@ var Enemy = function() {
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
     this.sprite = 'images/enemy-bug.png';
-    this.y = Math.floor(Math.random() * 3) * unitHeight + 0.75 * unitHeight;
+    this.y = Math.floor(Math.random() * 3) * UNIT_HEIGHT + 0.75 * UNIT_HEIGHT;
     this.x = 0;
-    this.speed = [Math.floor(Math.random() * 3 + 1) * unitWidth, 0];
+    this.speed = [Math.floor(Math.random() * 3 + 1) * UNIT_WIDTH, 0];
 };
 
 /** @function update the enemy object according to speed and location.
@@ -35,8 +35,8 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed[0] * dt;
-    if (this.x >= (Width - Width * 0.01)) {
-        this.x = -0.05 * Width;
+    if (this.x >= (WIDTH - WIDTH * 0.01)) {
+        this.x = -0.05 * WIDTH;
     }
 };
 
@@ -59,8 +59,8 @@ var player = function() {
                     'images/char-princess-girl.png'];
     this.selection = 2;
     this.speed = [0, 0];
-    this.x = playerStart[0];
-    this.y = playerStart[1];
+    this.x = PLAYER_START[0];
+    this.y = PLAYER_START[1];
     this.pts = 0;
 };
 
@@ -71,19 +71,19 @@ var player = function() {
  * than pseudo-continuous, as with enemies.
  */
 player.prototype.update = function() {
-    this.x += this.speed[0] * unitWidth;
-    this.y += this.speed[1] * unitHeight;
+    this.x += this.speed[0] * UNIT_WIDTH;
+    this.y += this.speed[1] * UNIT_HEIGHT;
     this.speed = [0, 0];
     //handle board edges
     if (this.x < 0) {
-        player.x = Width - unitWidth;
+        this.x = WIDTH - UNIT_WIDTH;
     }
-    if (this.x > Width - unitWidth) {
-        player.x = 0;
+    if (this.x > WIDTH - UNIT_WIDTH) {
+        this.x = 0;
     }
     //bottom edge
-    if (this.y > Height - unitHeight * 2) {
-        this.y = playerStart[1];
+    if (this.y > HEIGHT - UNIT_HEIGHT * 2) {
+        this.y = PLAYER_START[1];
     }
 };
 
@@ -118,8 +118,8 @@ player.prototype.handleInput = function(input) {
  * obliteration by bugs. Invoked by the engine's reset() function.
  */
 player.prototype.reset = function() {
-    this.x = playerStart[0];
-    this.y = playerStart[1];
+    this.x = PLAYER_START[0];
+    this.y = PLAYER_START[1];
 }
 
 /** @function Gem Defines the Gem class, with randomized appearance and
@@ -137,8 +137,8 @@ var Gem = function() {
     if (image === 3) {
         this.sprite = 'images/Gem Orange.png';
     }
-    this.x = Math.floor(Math.random() * 5) * unitWidth + 0.25 * unitWidth;
-    this.y = Math.floor((Math.random() * 3) + 1) * unitHeight + 0.5 * unitHeight;
+    this.x = Math.floor(Math.random() * 5) * UNIT_WIDTH + 0.25 * UNIT_WIDTH;
+    this.y = Math.floor((Math.random() * 3) + 1) * UNIT_HEIGHT + 0.5 * UNIT_HEIGHT;
     this.pts = 30;
 
 }
@@ -149,13 +149,13 @@ Gem.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y, 50, 80);
 }
 
-/** @var selector is the selector object within the character selection screen
+/** @var Selector is the Selector object within the character selection screen
   */
-var selector = function() {
+var Selector = function() {
   this.sprite = 'images/Selector.png';
   this.message = "Press 1-5 to Choose an Avatar and Press Enter when Ready";
-  this.y = 4.5*unitHeight;
-  this.x = 2*unitWidth;
+  this.y = 4.5*UNIT_HEIGHT;
+  this.x = 2*UNIT_WIDTH;
   this.selectionMade = false;
 
 }
@@ -163,15 +163,15 @@ var selector = function() {
 /** @function render displays the player prompt and possible character
   * choices within the character selection screen.
   */
-selector.prototype.render = function() {
+Selector.prototype.render = function() {
   ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
   ctx.fillStyle = "#ddd";
-  ctx.fillRect(unitWidth/7, 2.6*unitHeight, 4.75*unitWidth, 0.3*unitHeight);
+  ctx.fillRect(UNIT_WIDTH/7, 2.6*UNIT_HEIGHT, 4.75*UNIT_WIDTH, 0.3*UNIT_HEIGHT);
   ctx.fillStyle = "#555";
   ctx.font = "bolder small-caps 15px sans-serif";
-  ctx.fillText(this.message, unitWidth/6, 2.8 * unitHeight);
+  ctx.fillText(this.message, UNIT_WIDTH/6, 2.8 * UNIT_HEIGHT);
   player.sprites.forEach(function(sprite) {
-      ctx.drawImage(Resources.get(sprite), player.sprites.indexOf(sprite)*unitWidth, 4.5*unitHeight);
+      ctx.drawImage(Resources.get(sprite), player.sprites.indexOf(sprite)*UNIT_WIDTH, 4.5*UNIT_HEIGHT);
   });
 }
 
@@ -179,28 +179,28 @@ selector.prototype.render = function() {
   * Once the player presses the enter key, the player has made a selection
   * and this function is not invoked again during the game.
   */
-selector.prototype.handleInput = function(input) {
+Selector.prototype.handleInput = function(input) {
   var selectionMade = this.selectionMade;
     if (!selectionMade) {
-      sprites = player.sprites;
+      var sprites = player.sprites;
       if (input === '1') {
         this.x = 0;
         player.selection = 0;
       }
       if (input === '2') {
-        this.x = unitWidth;
+        this.x = UNIT_WIDTH;
         player.selection = 1;
       }
       if (input === '3') {
-        this.x = 2 * unitWidth;
+        this.x = 2 * UNIT_WIDTH;
         player.selection = 2;
       }
       if (input === '4') {
-        this.x = 3 * unitWidth;
+        this.x = 3 * UNIT_WIDTH;
         player.selection = 3;
       }
       if (input === '5') {
-        this.x = 4 * unitWidth;
+        this.x = 4 * UNIT_WIDTH;
         player.selection = 4;
       }
       if (input === 'enter') {
@@ -231,11 +231,11 @@ function createGems() {
 }
 
 /** @var player creates a living instance of our player prototype, allowing it
- * to be manipulated by the user and game engine as required. selector does
+ * to be manipulated by the user and game engine as required. Selector does
  * a similar operation for the character selection screen.
  */
 var player = new player;
-var selector = new selector;
+var selector = new Selector;
 
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don't need to modify this.

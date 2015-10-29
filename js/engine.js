@@ -22,13 +22,11 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        xMargin = unitWidth / 2,
-        yMargin = unitHeight / 2,
         msgCounter = Date.now(),
         ticker = "",
         lastTime;
-    canvas.width = 505;
-    canvas.height = 606;
+    canvas.width = WIDTH;
+    canvas.height = HEIGHT;
     doc.body.appendChild(canvas);
 
     /* This function serves as the kickoff point for the game loop itself
@@ -106,7 +104,7 @@ var Engine = (function(global) {
         //checking for collisions with bugs
         allEnemies.forEach(function(bug) {
             if (bug.y === player.y) {
-                if (player.x > (bug.x - xMargin) && player.x < (bug.x + xMargin)) {
+                if (player.x > (bug.x - X_MARGIN) && player.x < (bug.x + X_MARGIN)) {
                     ticker = "The bugs got you!";
                     msgCounter = Date.now() + 3000;
                     player.pts = 0;
@@ -124,8 +122,8 @@ var Engine = (function(global) {
         };
         //gem collection
         allGems.forEach(function(gem) {
-            if ((gem.x + xMargin) > player.x && (gem.x - xMargin) < player.x) {
-                if ((gem.y) > player.y && (gem.y - 2 * yMargin) < player.y) {
+            if ((gem.x + X_MARGIN) > player.x && (gem.x - X_MARGIN) < player.x) {
+                if ((gem.y) > player.y && (gem.y - 2 * Y_MARGIN) < player.y) {
                     ticker = "You got a gem!";
                     msgCounter = Date.now() + 2000;
                     player.pts += gem.pts;
