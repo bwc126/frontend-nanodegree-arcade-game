@@ -212,7 +212,7 @@ function createEnemies() {
     var numEnemies = 3;
     allEnemies = [];
     for (; numEnemies > 0; numEnemies--) {
-        allEnemies.push(new Enemy);
+        allEnemies.push(new Enemy());
     }
 };
 
@@ -223,7 +223,7 @@ function createGems() {
     var numGems = 3;
     allGems = [];
     for (; numGems > 0; numGems--) {
-        allGems.push(new Gem);
+        allGems.push(new Gem());
     }
 };
 
@@ -231,8 +231,8 @@ function createGems() {
  * to be manipulated by the user and game engine as required. Selector does
  * a similar operation for the character selection screen.
  */
-var player = new Player;
-var selector = new Selector;
+var player = new Player();
+var selector = new Selector();
 
 // This listens for key presses and sends the keys to your
 // player.handleInput() method. You don't need to modify this.
