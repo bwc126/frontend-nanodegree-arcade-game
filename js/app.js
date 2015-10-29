@@ -50,7 +50,7 @@ Enemy.prototype.render = function() {
  * to the default start and making it stationary. Also assigns its sprite and
  * initializes its point tally.
  */
-var player = function() {
+var Player = function() {
 
     this.sprites = ['images/char-cat-girl.png',
                     'images/char-horn-girl.png',
@@ -70,7 +70,7 @@ var player = function() {
  * is handled as a collision within the engine. Movement is discrete rather
  * than pseudo-continuous, as with enemies.
  */
-player.prototype.update = function() {
+Player.prototype.update = function() {
     this.x += this.speed[0] * UNIT_WIDTH;
     this.y += this.speed[1] * UNIT_HEIGHT;
     this.speed = [0, 0];
@@ -89,7 +89,7 @@ player.prototype.update = function() {
 
 /** @function render simply draws the player object on the canvas.
  */
-player.prototype.render = function() {
+Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprites[this.selection]), this.x, this.y);
 };
 
@@ -97,7 +97,7 @@ player.prototype.render = function() {
  * spatial logic within the game, assigning a corresponding speed to the
  * player.
  */
-player.prototype.handleInput = function(input) {
+Player.prototype.handleInput = function(input) {
 
         if (input === 'left') {
             this.speed[0] = -1;
@@ -111,16 +111,15 @@ player.prototype.handleInput = function(input) {
         if (input === 'down') {
             this.speed[1] = 1;
         }
-
-}
+};
 
 /** @function reset acts as a positional reset for our player upon victory or
  * obliteration by bugs. Invoked by the engine's reset() function.
  */
-player.prototype.reset = function() {
+Player.prototype.reset = function() {
     this.x = PLAYER_START[0];
     this.y = PLAYER_START[1];
-}
+};
 
 /** @function Gem Defines the Gem class, with randomized appearance and
  * position, but a single standard point value, which is passed to the player
@@ -140,8 +139,7 @@ var Gem = function() {
     this.x = Math.floor(Math.random() * 5) * UNIT_WIDTH + 0.25 * UNIT_WIDTH;
     this.y = Math.floor((Math.random() * 3) + 1) * UNIT_HEIGHT + 0.5 * UNIT_HEIGHT;
     this.pts = 30;
-
-}
+};
 
 /** @function render() displays a gem by drawing it on the canvas.
  */
@@ -157,8 +155,7 @@ var Selector = function() {
   this.y = 4.5*UNIT_HEIGHT;
   this.x = 2*UNIT_WIDTH;
   this.selectionMade = false;
-
-}
+};
 
 /** @function render displays the player prompt and possible character
   * choices within the character selection screen.
@@ -173,7 +170,7 @@ Selector.prototype.render = function() {
   player.sprites.forEach(function(sprite) {
       ctx.drawImage(Resources.get(sprite), player.sprites.indexOf(sprite)*UNIT_WIDTH, 4.5*UNIT_HEIGHT);
   });
-}
+};
 
 /** @function handleInput accepts keyboard inputs during character selection.
   * Once the player presses the enter key, the player has made a selection
@@ -206,7 +203,7 @@ Selector.prototype.handleInput = function(input) {
       if (input === 'enter') {
         this.selectionMade = true;
       }}
-}
+};
 
 /** @function: createEnemies allows us to create a distinct batch of enemies on
  * each reset of the game, with new positions and speeds
@@ -217,7 +214,7 @@ function createEnemies() {
     for (; numEnemies > 0; numEnemies--) {
         allEnemies.push(new Enemy);
     }
-}
+};
 
 /** @function createGems allows creation of a distinct batch of gem collectibles
  * for each playthrough or reset of the game, with new positions and images
@@ -228,13 +225,13 @@ function createGems() {
     for (; numGems > 0; numGems--) {
         allGems.push(new Gem);
     }
-}
+};
 
 /** @var player creates a living instance of our player prototype, allowing it
  * to be manipulated by the user and game engine as required. Selector does
  * a similar operation for the character selection screen.
  */
-var player = new player;
+var player = new Player;
 var selector = new Selector;
 
 // This listens for key presses and sends the keys to your
